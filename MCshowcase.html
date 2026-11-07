@@ -1,0 +1,815 @@
+<title>MCshowcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #e8e9e6;
+    --surface: #f7f8f6;
+    --surface-sunk: #dfe2de;
+    --ink: #16201f;
+    --ink-muted: #56625f;
+    --ink-faint: #7d8884;
+    --line: #c2c9c5;
+    --line-strong: #16201f;
+    --accent: #0b7a78;
+    --accent-ink: #ffffff;
+    --shadow: #c2c9c5;
+
+    --paper: #0b7a78;
+    --fabric: #9a6a1c;
+    --forge: #b5342a;
+    --velocity: #2e5fa3;
+
+    --step--1: 0.78rem;
+    --step-0: 1rem;
+    --step-1: 1.22rem;
+    --step-2: 1.6rem;
+    --step-3: 2.3rem;
+    --step-4: clamp(2.6rem, 7vw, 4rem);
+  }
+
+  :root:not([data-theme="light"]) {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #141a1a;
+      --surface: #1c2423;
+      --surface-sunk: #101615;
+      --ink: #e6ecea;
+      --ink-muted: #96a4a1;
+      --ink-faint: #76847f;
+      --line: #2e3a39;
+      --line-strong: #46d3cc;
+      --accent: #46d3cc;
+      --accent-ink: #091312;
+      --shadow: #0a0f0f;
+
+      --paper: #46d3cc;
+      --fabric: #d9a64a;
+      --forge: #e0705f;
+      --velocity: #7aa6e8;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #141a1a;
+    --surface: #1c2423;
+    --surface-sunk: #101615;
+    --ink: #e6ecea;
+    --ink-muted: #96a4a1;
+    --ink-faint: #76847f;
+    --line: #2e3a39;
+    --line-strong: #46d3cc;
+    --accent: #46d3cc;
+    --accent-ink: #091312;
+    --shadow: #0a0f0f;
+
+    --paper: #46d3cc;
+    --fabric: #d9a64a;
+    --forge: #e0705f;
+    --velocity: #7aa6e8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding-inline: 20px;
+    padding-block: 40px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-bottom: 28px;
+    border-bottom: 2px solid var(--line-strong);
+  }
+
+  .domain {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: var(--step-4);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1 .glyph { color: var(--accent); }
+
+  .tagline {
+    margin: 0;
+    max-width: 58ch;
+    font-size: var(--step-1);
+    color: var(--ink-muted);
+    text-wrap: pretty;
+  }
+
+  .counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+  }
+
+  .counts b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- launcher picker ---------- */
+
+  .picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+  }
+
+  .picker-label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  .picker select {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line-strong);
+    border-radius: 0;
+    padding: 7px 10px;
+  }
+
+  .picker select:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .picker-note { color: var(--ink-faint); }
+
+  .addr {
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    word-break: break-all;
+  }
+
+  /* ---------- placeholder notice ---------- */
+
+  .notice {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--surface-sunk);
+    border-left: 4px solid var(--fabric);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .notice strong {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- legend ---------- */
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .legend-label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    background: var(--swatch);
+  }
+
+  /* ---------- grid ---------- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(286px, 1fr));
+    gap: 22px;
+  }
+
+  .card {
+    --stripe: var(--paper);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px 22px 20px;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-left-width: 6px;
+    border-left-color: var(--stripe);
+    box-shadow: 5px 5px 0 var(--shadow);
+    transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: translate(-2px, -2px);
+    border-color: var(--line-strong);
+    border-left-color: var(--stripe);
+    box-shadow: 7px 7px 0 var(--shadow);
+  }
+
+  .card[data-loader="paper"] { --stripe: var(--paper); }
+  .card[data-loader="fabric"] { --stripe: var(--fabric); }
+  .card[data-loader="forge"] { --stripe: var(--forge); }
+  .card[data-loader="velocity"] { --stripe: var(--velocity); }
+
+  .card-head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card h2 {
+    margin: 0;
+    font-family: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: var(--step-2);
+    line-height: 1.12;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  .kind {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--stripe);
+  }
+
+  .blurb {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
+  .spec {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 14px;
+    margin: 0;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .spec dt {
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .spec dd {
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .try {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .try-label {
+    font-family: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: var(--step-1);
+  }
+
+  .deploy {
+    width: 100%;
+    padding: 13px 18px;
+    font-family: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 120ms ease, color 120ms ease;
+  }
+
+  .deploy:hover {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .deploy:focus-visible {
+    outline: 3px solid var(--line-strong);
+    outline-offset: 3px;
+  }
+
+  .deploy .chev {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.85rem;
+    transition: transform 140ms ease;
+  }
+
+  .deploy.is-launching {
+    background: transparent;
+    color: var(--accent);
+    pointer-events: none;
+  }
+
+  .deploy.is-launching .chev {
+    animation: pulse 900ms steps(3, end) infinite;
+  }
+
+  @keyframes pulse {
+    0%   { opacity: 0.25; }
+    100% { opacity: 1; }
+  }
+
+  /* secondary actions under Deploy */
+
+  .secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.74rem;
+  }
+
+  .secondary button,
+  .secondary a {
+    font: inherit;
+    color: var(--ink-muted);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 2px 0;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+  }
+
+  .secondary button:hover,
+  .secondary a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .secondary button:focus-visible,
+  .secondary a:focus-visible {
+    outline: 2px solid var(--line-strong);
+    outline-offset: 2px;
+  }
+
+  .sandbox-note {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--surface-sunk);
+    border-left: 4px solid var(--velocity);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .sandbox-note strong {
+    display: block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    padding-top: 26px;
+    border-top: 2px solid var(--line-strong);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px 24px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  footer a { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="domain">MCshowcase.in</div>
+    <h1>MC<span class="glyph">showcase</span></h1>
+    <p class="tagline">Server plugins and client mods I build for Minecraft — each one packaged as a single
+      <code style="font-family:'IBM Plex Mono',monospace;font-size:0.9em">.jar</code> you can drop straight into a running server.</p>
+    <div class="counts">
+      <span><b>6</b> projects</span>
+      <span><b>4</b> platforms</span>
+      <span>tested on <b>1.20.1</b> &rarr; <b>1.21.4</b></span>
+    </div>
+
+    <div class="picker">
+      <label class="picker-label" for="launcher">Java Edition launcher</label>
+      <select id="launcher"></select>
+      <span class="picker-note" id="picker-note"></span>
+    </div>
+  </header>
+
+  <section class="notice">
+    <div>
+      <strong>Placeholder entries</strong>
+      The six projects below are stand-ins so you can see the layout working. Mods deploy to the Java Edition
+      launcher picked above; server plugins hand over the address to join instead. Send your real names,
+      versions and blurbs and each card goes live.
+    </div>
+  </section>
+
+  <section class="sandbox-note" id="sandbox-note" hidden>
+    <div>
+      <strong>Preview window</strong>
+      You're viewing this inside an embedded frame, which browsers stop from handing off to desktop apps. Deploy will show
+      the install steps instead of opening your launcher. Open the page in its own browser tab for one-click deploy.
+    </div>
+  </section>
+
+  <div class="legend">
+    <span class="legend-label">Platform</span>
+    <span class="legend-item"><span class="swatch" style="--swatch: var(--paper)"></span>Paper / Spigot</span>
+    <span class="legend-item"><span class="swatch" style="--swatch: var(--fabric)"></span>Fabric</span>
+    <span class="legend-item"><span class="swatch" style="--swatch: var(--forge)"></span>Forge</span>
+    <span class="legend-item"><span class="swatch" style="--swatch: var(--velocity)"></span>Velocity</span>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>
+    <span>MCshowcase.in — built and maintained by one person</span>
+    <span>Questions? <a href="#">Open an issue</a></span>
+  </footer>
+
+</div>
+
+<script>
+  // ---------------------------------------------------------------------------
+  // Your projects. `clipUrl` links a gameplay clip; `server` adds a copyable
+  // demo address. Deploy itself is the same on every card — it opens the
+  // visitor's launcher.
+  // ---------------------------------------------------------------------------
+  var PROJECTS = [
+    {
+      name: "VaultKeeper",
+      loader: "paper",
+      kind: "Server plugin",
+      blurb: "Per-player storage vaults that survive world resets, with permission-gated page counts and an audit log of every withdrawal.",
+      mc: "1.20.4 – 1.21.4",
+      jar: "vaultkeeper-2.4.1.jar",
+      size: "412 KB",
+      downloads: "18,430",
+      deps: "None",
+      clipUrl: "",
+      server: "play.mcshowcase.in"
+    },
+    {
+      name: "LagSweep",
+      loader: "paper",
+      kind: "Server plugin",
+      blurb: "Sweeps dropped items, stray mobs and orphaned hoppers on a tick budget, so cleanup never lands inside a TPS dip.",
+      mc: "1.19.4 – 1.21.4",
+      jar: "lagsweep-1.8.0.jar",
+      size: "196 KB",
+      downloads: "41,207",
+      deps: "None",
+      clipUrl: "",
+      server: "play.mcshowcase.in"
+    },
+    {
+      name: "OreCompass",
+      loader: "fabric",
+      kind: "Client mod",
+      blurb: "A HUD needle that points toward the nearest surveyed ore vein you have already visited — no x-ray, just your own mapped history.",
+      mc: "1.21 – 1.21.4",
+      jar: "orecompass-0.9.3.jar",
+      size: "88 KB",
+      downloads: "7,912",
+      deps: "Fabric API",
+      clipUrl: "",
+      server: ""
+    },
+    {
+      name: "GuildGates",
+      loader: "paper",
+      kind: "Server plugin",
+      blurb: "Land claims, guild treasuries and linked warp gates in one plugin, with a flat-file mode for servers that run without a database.",
+      mc: "1.20.1 – 1.21.4",
+      jar: "guildgates-3.1.2.jar",
+      size: "1.2 MB",
+      downloads: "26,884",
+      deps: "Vault (optional)",
+      clipUrl: "",
+      server: "play.mcshowcase.in"
+    },
+    {
+      name: "SkyFauna",
+      loader: "forge",
+      kind: "Content mod",
+      blurb: "Eleven passive mobs for sky islands and amplified terrain, each with its own breeding chain and a loot table you can retune in config.",
+      mc: "1.20.1",
+      jar: "skyfauna-1.4.0.jar",
+      size: "6.8 MB",
+      downloads: "12,045",
+      deps: "Forge 47.2+",
+      clipUrl: "",
+      server: ""
+    },
+    {
+      name: "QueryPanel",
+      loader: "velocity",
+      kind: "Proxy plugin",
+      blurb: "Exposes player counts, per-backend ping and restart windows as a tiny JSON endpoint your status page can poll directly.",
+      mc: "Velocity 3.3+",
+      jar: "querypanel-1.2.0.jar",
+      size: "154 KB",
+      downloads: "4,338",
+      deps: "None",
+      clipUrl: "",
+      server: "proxy.mcshowcase.in"
+    }
+  ];
+
+  // ---------------------------------------------------------------------------
+  // Java Edition launchers. Each registers its own URL scheme on install, so a
+  // link using that scheme hands off to it. Deliberately no `minecraft://` here
+  // — that one belongs to Bedrock / Minecraft for Windows.
+  // ---------------------------------------------------------------------------
+  // Deploy opens the visitor's Java Edition launcher — nothing is installed.
+  // A bare scheme is all that is needed: each launcher registers one when it is
+  // installed, and opening it with no route lands on the normal instance list.
+  // Deliberately no `minecraft://` — that scheme belongs to Bedrock.
+  var LAUNCHERS = [
+    { id: "prism",    name: "Prism Launcher", scheme: "prismlauncher://" },
+    { id: "modrinth", name: "Modrinth App",   scheme: "modrinth://" }
+  ];
+
+  var STORE_KEY = "mcshowcase.launcher";
+
+  function readLauncher() {
+    try {
+      var v = localStorage.getItem(STORE_KEY);
+      for (var i = 0; i < LAUNCHERS.length; i++) if (LAUNCHERS[i].id === v) return v;
+    } catch (e) { /* private window or blocked storage */ }
+    return LAUNCHERS[0].id;
+  }
+
+  function writeLauncher(id) {
+    try { localStorage.setItem(STORE_KEY, id); } catch (e) { /* nothing to do */ }
+  }
+
+  var launcher = readLauncher();
+
+  function launcherBy(id) {
+    for (var i = 0; i < LAUNCHERS.length; i++) if (LAUNCHERS[i].id === id) return LAUNCHERS[i];
+    return LAUNCHERS[0];
+  }
+
+  function launcherName(id) { return launcherBy(id).name; }
+
+  // How long to wait for the launcher to take over before showing the fallback.
+  var HANDOFF_MS = 2200;
+
+  // Embedded frames cannot hand off to desktop apps.
+  var FRAMED = (function () {
+    try { return window.self !== window.top; } catch (e) { return true; }
+  })();
+
+  if (FRAMED) document.getElementById("sandbox-note").hidden = false;
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  var grid = document.getElementById("grid");
+  var CARDS = [];
+
+  PROJECTS.forEach(function (p, i) {
+    // Server-side platforms can't be installed by a visitor — they join instead.
+    var isServer = p.loader === "paper" || p.loader === "velocity";
+    var card = document.createElement("article");
+    card.className = "card";
+    card.setAttribute("data-loader", p.loader);
+    card.innerHTML =
+      '<div class="card-head">' +
+        '<span class="kind">' + esc(p.kind) + '</span>' +
+        '<h2>' + esc(p.name) + '</h2>' +
+      '</div>' +
+      '<p class="blurb">' + esc(p.blurb) + '</p>' +
+      '<dl class="spec">' +
+        '<dt>Minecraft</dt><dd>' + esc(p.mc) + '</dd>' +
+        '<dt>Requires</dt><dd>' + esc(p.deps) + '</dd>' +
+        '<dt>Jar</dt><dd>' + esc(p.size) + '</dd>' +
+        '<dt>Installs</dt><dd>' + esc(p.downloads) + '</dd>' +
+      '</dl>' +
+      '<div class="try">' +
+        '<span class="try-label">Want to try?</span>' +
+        (isServer
+          ? '<button class="deploy copyip" type="button" id="deploy-' + i + '" data-copy="' + esc(p.server) + '">' +
+              '<span class="deploy-text">Copy IP</span><span class="chev" aria-hidden="true">&#10697;</span>' +
+            '</button>'
+          : '<a class="deploy" href="#" id="deploy-' + i + '" role="button">' +
+              '<span class="deploy-text">Deploy</span><span class="chev" aria-hidden="true">&#9654;</span>' +
+            '</a>') +
+        '<div class="secondary">' +
+          (isServer && p.server ? '<span class="addr">' + esc(p.server) + '</span>' : '') +
+          (p.clipUrl ? '<a href="' + esc(p.clipUrl) + '" target="_blank" rel="noopener">Watch it in action &#8599;</a>' : '') +
+        '</div>' +
+      '</div>';
+    grid.appendChild(card);
+    if (!isServer) CARDS.push({ project: p, deploy: card.querySelector(".deploy") });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Launcher picker. One choice drives every Deploy button, remembered per
+  // visitor so they only answer once.
+  // ---------------------------------------------------------------------------
+  var select = document.getElementById("launcher");
+  var pickerNote = document.getElementById("picker-note");
+
+  LAUNCHERS.forEach(function (l) {
+    var opt = document.createElement("option");
+    opt.value = l.id;
+    opt.textContent = l.name;
+    select.appendChild(opt);
+  });
+  select.value = launcher;
+
+  function syncLaunchers() {
+    var scheme = launcherBy(launcher).scheme;
+    CARDS.forEach(function (c) { c.deploy.setAttribute("href", scheme); });
+    pickerNote.textContent = "Mod cards open it — press Play there to start Java Edition.";
+  }
+
+  select.addEventListener("change", function () {
+    launcher = select.value;
+    writeLauncher(launcher);
+    syncLaunchers();
+  });
+
+  syncLaunchers();
+
+  // Flash a message on the button itself, then put the label back.
+  function flash(deploy, message) {
+    var label = deploy.querySelector(".deploy-text");
+    if (label.getAttribute("data-busy")) return;
+    var original = label.textContent;
+    label.setAttribute("data-busy", "1");
+    label.textContent = message;
+    setTimeout(function () {
+      label.textContent = original;
+      label.removeAttribute("data-busy");
+    }, 2400);
+  }
+
+  // Click Deploy: let the browser hand the scheme to the launcher, then check
+  // whether anything took over. If the page never lost focus, nothing is
+  // registered for that scheme, so show the manual route instead.
+  function watchHandoff(deploy) {
+    var label = deploy.querySelector(".deploy-text");
+    var original = label.textContent;
+    var tookOver = false;
+
+    function leave() { tookOver = true; }
+    document.addEventListener("visibilitychange", leave);
+    window.addEventListener("blur", leave);
+
+    deploy.classList.add("is-launching");
+    label.textContent = "Opening " + launcherName(launcher);
+
+    setTimeout(function () {
+      document.removeEventListener("visibilitychange", leave);
+      window.removeEventListener("blur", leave);
+      deploy.classList.remove("is-launching");
+
+      if (tookOver || document.hidden) {
+        label.textContent = launcherName(launcher) + " opened";
+      } else {
+        label.textContent = launcherName(launcher) + " not found";
+      }
+      setTimeout(function () { label.textContent = original; }, 2400);
+    }, HANDOFF_MS);
+  }
+
+  // Copy a server address straight off the button, reporting on the button.
+  function copyAddress(btn) {
+    var text = btn.getAttribute("data-copy");
+    if (!text) { flash(btn, "No server yet"); return; }
+    try {
+      navigator.clipboard.writeText(text).then(
+        function () { flash(btn, "Copied"); },
+        function () { flash(btn, "Press Ctrl+C"); }
+      );
+    } catch (err) {
+      flash(btn, "Press Ctrl+C");
+    }
+  }
+
+  grid.addEventListener("click", function (e) {
+    var ip = e.target.closest(".copyip");
+    if (ip) {
+      copyAddress(ip);
+      return;
+    }
+
+    var deploy = e.target.closest(".deploy");
+    if (deploy) {
+      if (FRAMED) {
+        // An embedded frame cannot hand off to a desktop app.
+        e.preventDefault();
+        flash(deploy, "Open in a tab first");
+      } else {
+        watchHandoff(deploy);
+      }
+      return;
+    }
+
+  });
+</script>
